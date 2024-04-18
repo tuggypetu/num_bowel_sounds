@@ -169,7 +169,7 @@ if st.button('Use audio sample'):
     X = stft(y, n_fft=441, hop_length=110, window='hann')
     Xdb = amplitude_to_db(np.abs(X), ref=np.max)
 
-    get_spectrogram_and_crop(Xdb, audio_file.name, sav_path)
+    get_spectrogram_and_crop(Xdb, "sample wav file", sav_path)
 
     spec_image = st.image(sav_path)
 
