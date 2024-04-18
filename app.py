@@ -30,7 +30,7 @@ audio_file = st.file_uploader("Upload audio file", type=['mp3', 'wav', 'ogg'])
 
 
 
-def predict_img(audio_fil):
+def predict_img(audio_fil, audio_filename):
     #import model
     model = tensorflow.keras.models.load_model('my_model')
 
@@ -40,7 +40,7 @@ def predict_img(audio_fil):
     prediction = model.predict(X).reshape(-1,200).ravel()
     #one-hot-result
     result = one_hot_X(prediction)
-    return f"    {len(result)} number of bowel sounds in {audio_file.name}"
+    return f"    {len(result)} number of bowel sounds in {audio_filename}"
 
 
 def get_x(filename):
@@ -155,7 +155,7 @@ if audio_file is not None:
     spec_image = st.image(sav_path)
 
     audio_data, s_rate = librosa.load(path, duration=2)
-    st.header(predict_img(audio_data))
+    st.header(predict_img(audio_data, audio_file.name))
 
 
 if st.button('Use audio sample'):
@@ -174,6 +174,6 @@ if st.button('Use audio sample'):
     spec_image = st.image(sav_path)
 
     audio_data, s_rate = librosa.load(path, duration=2)
-    st.header(predict_img(audio_data))
+    st.header(predict_img(audio_data, "sample wav file"))
 
 # streamlit run app.py
