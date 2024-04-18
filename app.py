@@ -103,26 +103,12 @@ def save_audio(file):
         f.write(file.getbuffer())
     return 0
 
-
-if audio_file is not None:
-    # audio_bytes = audio_file.read()
-    # audio_file = st.audio(audio_bytes, format='audio/wav')
-    # target = os.path.join('temp/' + audio_file.name)  # location of image present in temp directory
-    # audio_file.export(target)
-
-    sav_path = f"images/spec_mine.png"
-    path = os.path.join("audio", audio_file.name)
-    if_save_audio = save_audio(audio_file)
-
-    gg = st.audio(audio_file, format='audio/wav', start_time=0)
-
-    y, sr = load(path, duration=2)
-    X = stft(y, n_fft=441, hop_length=110, window='hann')
-    Xdb = amplitude_to_db(np.abs(X), ref=np.max)
+def get_spectrogram_and_crop(Xdb, audio_filename, sav_path):
+    """Get spectrogram and crop image"""
 
     fig, ax = plt.subplots(figsize=(72, 72))
     img = display.specshow(Xdb, x_axis='time', y_axis='linear', ax=ax)
-    ax.set(title=audio_file.name)
+    ax.set(title=audio_filename)
     fig.colorbar(img, ax=ax, format="%+2.f dB")
     plt.savefig(sav_path)
     plt.close(fig)
@@ -142,14 +128,52 @@ if audio_file is not None:
 
     im1.save(sav_path)
 
-    print(im.size, ',', im1.size)
+    # print(im.size, ',', im1.size)
     im.close()
     im1.close()
+    
+
+
+if audio_file is not None:
+    # audio_bytes = audio_file.read()
+    # audio_file = st.audio(audio_bytes, format='audio/wav')
+    # target = os.path.join('temp/' + audio_file.name)  # location of image present in temp directory
+    # audio_file.export(target)
+
+    sav_path = f"images/spec_mine.png"
+    path = os.path.join("audio", audio_file.name)
+    if_save_audio = save_audio(audio_file)
+
+    gg = st.audio(audio_file, format='audio/wav', start_time=0)
+
+    y, sr = load(path, duration=2)
+    X = stft(y, n_fft=441, hop_length=110, window='hann')
+    Xdb = amplitude_to_db(np.abs(X), ref=np.max)
+
+    get_spectrogram_and_crop(Xdb, audio_file.name, sav_path)
 
     spec_image = st.image(sav_path)
 
     audio_data, s_rate = librosa.load(path, duration=2)
     st.header(predict_img(audio_data))
 
+
+if st.button('Use audio sample'):
+    
+    sav_path = f"images/spec_mine.png"
+    path = os.path.join("audio", "0_a.wav")
+
+    gg = st.audio(path, format='audio/wav', start_time=0)
+
+    y, sr = load(path, duration=2)
+    X = stft(y, n_fft=441, hop_length=110, window='hann')
+    Xdb = amplitude_to_db(np.abs(X), ref=np.max)
+
+    get_spectrogram_and_crop(Xdb, audio_file.name, sav_path)
+
+    spec_image = st.image(sav_path)
+
+    audio_data, s_rate = librosa.load(path, duration=2)
+    st.header(predict_img(audio_data))
 
 # streamlit run app.py
