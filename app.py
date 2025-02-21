@@ -158,22 +158,22 @@ if audio_file is not None:
     st.header(predict_img(audio_data, audio_file.name))
 
 
-if st.button('Use audio sample'):
+# if st.button('Use audio sample'):
     
-    sav_path = f"images/spec_mine.png"
-    path = os.path.join("audio", "0_a.wav")
+#     sav_path = f"images/spec_mine.png"
+#     path = os.path.join("audio", "0_a.wav")
 
-    gg = st.audio(path, format='audio/wav', start_time=0)
+#     gg = st.audio(path, format='audio/wav', start_time=0)
 
-    y, sr = load(path, duration=2)
-    X = stft(y, n_fft=441, hop_length=110, window='hann')
-    Xdb = amplitude_to_db(np.abs(X), ref=np.max)
+#     y, sr = load(path, duration=2)
+#     X = stft(y, n_fft=441, hop_length=110, window='hann')
+#     Xdb = amplitude_to_db(np.abs(X), ref=np.max)
 
-    get_spectrogram_and_crop(Xdb, "sample wav file", sav_path)
+#     get_spectrogram_and_crop(Xdb, "sample wav file", sav_path)
 
-    spec_image = st.image(sav_path)
+#     spec_image = st.image(sav_path)
 
-    audio_data, s_rate = librosa.load(path, duration=2)
-    st.header(predict_img(audio_data, "sample wav file"))
+#     audio_data, s_rate = librosa.load(path, duration=2)
+#     st.header(predict_img(audio_data, "sample wav file"))
 
 # streamlit run app.py
